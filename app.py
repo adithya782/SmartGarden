@@ -1,13 +1,15 @@
 import time
 from datetime import datetime
 from flask import Flask, Response, json, request, jsonify
+from flask_cors import CORS
 import psycopg2
 from dotenv import load_dotenv
 import os
+import random
 
 load_dotenv()
 app= Flask(__name__)
-
+CORS(app, resources={r"/stream": {"origins": "*"}})
 data = 0
 conn = psycopg2.connect(database=os.getenv('DB'),user=os.getenv('DB_user'),password=os.getenv('DB_password'),host=os.getenv('DB_host'), port=os.getenv('DB_port'))
 cursor = conn.cursor()
@@ -41,6 +43,12 @@ def upload():
         send = json.dumps(data)
         yield f"data: {send}\n\n"
         time.sleep(2)
+
+# def upload():
+#     while True:
+#         num = random.randint(1,100)
+#         yield f"data: {num}\n\n"
+#         time.sleep(2)
 
 @app.route('/stream')
 def stream():

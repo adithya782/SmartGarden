@@ -1,8 +1,6 @@
 #include <WiFi.h>
 #include <HTTPClient.h>
-const char* ssid = "Your_wifi_ssid";
-const char*  password = "Your_wifi_password";
-const char* server = "http://192.168.55.106:5000/data";
+#include "config.h"
 
 // int count = 0;
 void setup() {
