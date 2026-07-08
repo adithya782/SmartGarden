@@ -9,3 +9,9 @@
 - Stored incoming sensor data into the `PostgreSQL database`.
 
 > **Data Flow:** Soil Moisture Sensor → ESP32 → Flask → Database
+
+## DAY - 2
+
+- Tried reading the Server Sent Events in react native using `EventSource`
+- This just displays the realtime sensor reading / Soil Moisture
+  > **Data Flow:** Soil Moisture Sensor -> ESP32 -> Flask -> Database and React Web Application
