@@ -10,7 +10,7 @@ import random
 load_dotenv()
 app= Flask(__name__)
 CORS(app, resources={r"/stream": {"origins": "*"}})
-data = 0
+data = None
 conn = psycopg2.connect(database=os.getenv('DB'),user=os.getenv('DB_user'),password=os.getenv('DB_password'),host=os.getenv('DB_host'), port=os.getenv('DB_port'))
 cursor = conn.cursor()
 cursor.execute('''
@@ -39,9 +39,18 @@ def receive():
     })
 
 def upload():
+    global data
     while True:
-        send = json.dumps(data)
-        yield f"data: {send}\n\n"
+        if data is None:
+            time.sleep(0.5)
+            continue
+        curr_data  = data
+        data = None
+        raw =(((4095-int(curr_data))/(4095-1200))*100)
+        percent = max(0,min(100,raw))
+        send= json.dumps(round(percent))
+        print(f"[SENSOR DATA] Raw Data: {curr_data} | Final Percent: {round(percent)}% | Sending String: '{send}'")
+        yield f"data: {send}\n\n"      
         time.sleep(2)
 
 # def upload():
